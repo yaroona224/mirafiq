@@ -1,0 +1,219 @@
+/* ==========================================================================
+   نظام التصميم — المصدر الوحيد لكل لون ومسافة وحجم خط في التطبيق.
+
+   قاعدة واحدة لا تُخرق:  ممنوع كتابة أي لون أو نصف قطر داخل أي شاشة.
+   كل شيء من المتغيّرات أدناه.
+
+   المتغيّرات الأربعة التالية تُستبدل وقت التشغيل من جدول brand_settings
+   (انظر lib/brand.ts و app/layout.tsx):
+     --brand-primary  --brand-secondary  --radius  --font-body
+   ========================================================================== */
+
+:root {
+  /* ---------- الهوية (تأتي من قاعدة البيانات) ---------- */
+  --brand-primary: #0d5c63;
+  --brand-secondary: #c8781f;
+  --radius: 10px;
+  --font-body: "IBM Plex Sans Arabic", system-ui, sans-serif;
+
+  /* ---------- خطوط ثابتة ---------- */
+  --font-display: "Readex Pro", var(--font-body);
+  --font-data: "IBM Plex Mono", ui-monospace, "Courier New", monospace;
+
+  /* ---------- محايدات (نهاري) ---------- */
+  --bg: #f3f7f6;
+  --surface: #ffffff;
+  --surface-2: #e9f0ef;
+  --fg: #0f1d1e;
+  --fg-muted: #5b6f70;
+  --border: #d6e2e1;
+  --shadow: 0 1px 2px rgba(15, 29, 30, 0.05), 0 10px 26px -16px rgba(15, 29, 30, 0.28);
+
+  /* ---------- دلالية: ليست جزءاً من الهوية ولا تُخصَّص ---------- */
+  --ok: #1c7a4c;
+  --ok-bg: #e2f2e9;
+  --warn: #8e6207;
+  --warn-bg: #f9efd8;
+  --crit: #a32626;
+  --crit-bg: #fae5e5;
+
+  /* ---------- مشتقّات من اللون الرئيسي ---------- */
+  --brand-display: var(--brand-primary);
+  --brand-wash: color-mix(in srgb, var(--brand-primary) 9%, transparent);
+  --brand-line: color-mix(in srgb, var(--brand-primary) 26%, transparent);
+  --brand-fg: #ffffff;
+
+  /* ---------- مسافات وأحجام ---------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  --text-xs: 11.5px;
+  --text-sm: 12.5px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 21px;
+  --text-2xl: 26px;
+
+  --shell-max: 1180px;
+  --side-w: 212px;
+
+  color-scheme: light;
+}
+
+/* ---------- محايدات (ليلي) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1313;
+    --surface: #111c1d;
+    --surface-2: #182627;
+    --fg: #e7f0ef;
+    --fg-muted: #92a7a7;
+    --border: #243434;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+
+    --ok: #56c892;
+    --ok-bg: color-mix(in srgb, #56c892 16%, transparent);
+    --warn: #dca73c;
+    --warn-bg: color-mix(in srgb, #dca73c 16%, transparent);
+    --crit: #e57373;
+    --crit-bg: color-mix(in srgb, #e57373 16%, transparent);
+
+    --brand-display: color-mix(in srgb, var(--brand-primary) 55%, #ffffff);
+    --brand-wash: color-mix(in srgb, var(--brand-primary) 22%, transparent);
+    --brand-line: color-mix(in srgb, var(--brand-primary) 44%, transparent);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b1313;
+  --surface: #111c1d;
+  --surface-2: #182627;
+  --fg: #e7f0ef;
+  --fg-muted: #92a7a7;
+  --border: #243434;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+
+  --ok: #56c892;
+  --ok-bg: color-mix(in srgb, #56c892 16%, transparent);
+  --warn: #dca73c;
+  --warn-bg: color-mix(in srgb, #dca73c 16%, transparent);
+  --crit: #e57373;
+  --crit-bg: color-mix(in srgb, #e57373 16%, transparent);
+
+  --brand-display: color-mix(in srgb, var(--brand-primary) 55%, #ffffff);
+  --brand-wash: color-mix(in srgb, var(--brand-primary) 22%, transparent);
+  --brand-line: color-mix(in srgb, var(--brand-primary) 44%, transparent);
+
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   الأساس
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a {
+  color: var(--brand-display);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand-display);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   تنسيقات عامة
+   ========================================================================== */
+
+.u-mono {
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  direction: ltr;
+  display: inline-block;
+}
+
+.u-num { font-variant-numeric: tabular-nums; }
+.u-muted { color: var(--fg-muted); }
+
+.u-eyebrow {
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.u-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.u-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.u-gutter {
+  padding-left: max(var(--sp-4), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--sp-4), env(safe-area-inset-right, 0px));
+}
+
+.u-push { margin-inline-start: auto; }
+.u-mb { margin-bottom: var(--sp-4); }
+.u-mt { margin-top: var(--sp-4); }
