@@ -16,6 +16,7 @@ import {
 } from "@/components/ui";
 import { BRAND_PRESETS, FONT_OPTIONS, applyBrandToDocument } from "@/lib/brand";
 import { createClient } from "@/lib/supabase/client";
+import { refreshBrand } from "./actions";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Brand } from "@/lib/types";
 
@@ -62,6 +63,7 @@ export function BrandEditor({ initial }: { initial: Brand }) {
 
     setSaved(brand);
     setMessage("تم الحفظ.");
+    await refreshBrand();
     router.refresh();
   }
 
