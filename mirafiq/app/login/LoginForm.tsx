@@ -8,6 +8,17 @@ import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Brand } from "@/lib/types";
 
+/**
+ * مسار داخلي فقط. `startsWith("/")` وحده لا يكفي: "//evil.com" و "/\\evil.com"
+ * يمرّان منه ويصيران رابطاً خارجياً (إعادة توجيه مفتوحة تُستغل في التصيّد).
+ */
+function safeNext(next: string | null): string {
+  if (!next) return "/tasks";
+  if (!next.startsWith("/")) return "/tasks";
+  if (next.startsWith("//") || next.startsWith("/\\")) return "/tasks";
+  return next;
+}
+
 export function LoginForm({ brand }: { brand: Brand }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -37,7 +48,7 @@ export function LoginForm({ brand }: { brand: Brand }) {
 
     // يُقرأ من الرابط داخل المعالج — استخدام useSearchParams يمنع التصيير المسبق.
     const next = new URLSearchParams(window.location.search).get("next");
-    router.replace(next && next.startsWith("/") ? next : "/tasks");
+    router.replace(safeNext(next));
     router.refresh();
   }
 
