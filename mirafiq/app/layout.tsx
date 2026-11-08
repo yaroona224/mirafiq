@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { brandStyle } from "@/lib/brand";
 import { getBrand } from "@/lib/brand-server";
+import { PREFS_SCRIPT } from "@/lib/prefs";
 import "./globals.css";
 import "./components.css";
 
@@ -23,8 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** يقرأ المظهر المحفوظ قبل أول رسم، فلا تحدث وميضة. */
-const THEME_SCRIPT = `try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}`;
+
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const brand = await getBrand();
@@ -34,7 +34,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href={FONTS_HREF} />
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* تفضيلات المتصفّح قبل أول رسم، فلا تحدث وميضة */}
+        <script dangerouslySetInnerHTML={{ __html: PREFS_SCRIPT }} />
       </head>
       <body>{children}</body>
     </html>

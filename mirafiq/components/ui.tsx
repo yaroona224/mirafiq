@@ -214,3 +214,156 @@ export function Notice({
 export function CodeBlock({ children }: { children: string }) {
   return <code className="code-block">{children}</code>;
 }
+
+/* ---------------- تبويبات الحالة ---------------- */
+
+export type TabItem = {
+  value: string;
+  label: string;
+  count?: number;
+  tone?: "new" | "run" | "done" | "crit" | "neutral";
+};
+
+const TONE_COLOR: Record<string, string> = {
+  new: "var(--fg-muted)",
+  run: "var(--warn)",
+  done: "var(--ok)",
+  crit: "var(--crit)",
+  neutral: "var(--fg-muted)",
+};
+
+export function Tabs({
+  items,
+  value,
+  onChange,
+  label,
+}: {
+  items: TabItem[];
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+}) {
+  return (
+    <div className="tabs" role="tablist" aria-label={label}>
+      {items.map((item) => (
+        <button
+          key={item.value}
+          type="button"
+          role="tab"
+          aria-selected={item.value === value}
+          className="tab"
+          onClick={() => onChange(item.value)}
+        >
+          {item.tone ? (
+            <span className="tab-dot" style={{ color: TONE_COLOR[item.tone] }} />
+          ) : null}
+          {item.label}
+          {item.count === undefined ? null : (
+            <span className="tab-count">{item.count}</span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* ---------------- مفتاح تبديل ---------------- */
+
+export function Switch({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (next: boolean) => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      className="switch"
+      onClick={() => onChange(!checked)}
+    />
+  );
+}
+
+/** سطر إعداد: عنوان على اليمين وعنصر التحكّم على اليسار. */
+export function SettingRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="switch-row">
+      <span className="switch-label">{label}</span>
+      {children}
+    </div>
+  );
+}
+
+/* ---------------- صندوق اختيار ---------------- */
+
+export function Check({
+  checked,
+  indeterminate,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  indeterminate?: boolean;
+  onChange: (next: boolean) => void;
+  label: string;
+}) {
+  return (
+    <input
+      type="checkbox"
+      className="check"
+      aria-label={label}
+      checked={checked}
+      ref={(el) => {
+        if (el) el.indeterminate = Boolean(indeterminate) && !checked;
+      }}
+      onChange={(e) => onChange(e.target.checked)}
+    />
+  );
+}
+
+/* ---------------- اختيار لون ---------------- */
+
+export function Swatches({
+  options,
+  value,
+  onChange,
+  colorOf,
+  label,
+}: {
+  options: readonly { key: string; label: string }[];
+  value: string;
+  onChange: (key: string) => void;
+  colorOf: (key: string) => string;
+  label: string;
+}) {
+  return (
+    <div className="swatches" role="group" aria-label={label}>
+      {options.map((o) => (
+        <button
+          key={o.key}
+          type="button"
+          className="swatch"
+          aria-pressed={o.key === value}
+          aria-label={o.label}
+          title={o.label}
+          style={{ background: colorOf(o.key) }}
+          onClick={() => onChange(o.key)}
+        >
+          {o.key === value ? <span className="swatch-check">✓</span> : null}
+        </button>
+      ))}
+    </div>
+  );
+}

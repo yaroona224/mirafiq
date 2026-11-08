@@ -217,3 +217,44 @@ button, input, select, textarea {
 .u-push { margin-inline-start: auto; }
 .u-mb { margin-bottom: var(--sp-4); }
 .u-mt { margin-top: var(--sp-4); }
+
+/* ==========================================================================
+   تفضيلات المتصفّح — طبقة فوق الهوية، يختارها كل مستخدم لنفسه.
+   تُطبَّق بسمات data-* على <html> (انظر lib/prefs.ts).
+   لا تمسّ brand_settings ولا تؤثر على بقية الفريق.
+   ========================================================================== */
+
+:root {
+  --ui-scale: 1;
+  --row-pad: var(--sp-3);
+}
+
+/* حجم خط الواجهة */
+:root[data-scale="1"] { --ui-scale: 0.88; }
+:root[data-scale="2"] { --ui-scale: 0.94; }
+:root[data-scale="3"] { --ui-scale: 1; }
+:root[data-scale="4"] { --ui-scale: 1.07; }
+:root[data-scale="5"] { --ui-scale: 1.15; }
+
+/* كثافة صفوف الجداول */
+:root[data-density="1"] { --row-pad: var(--sp-2); }
+:root[data-density="2"] { --row-pad: var(--sp-3); }
+:root[data-density="3"] { --row-pad: var(--sp-4); }
+
+body { font-size: calc(var(--text-md) * var(--ui-scale)); }
+
+/* خط الواجهة ولون الواجهة يتجاوزان الهوية لهذا المتصفّح فقط.
+   الهوية تُحقن كـ inline style على <html>، وهو يتفوّق على أي ملف CSS،
+   فطبقة المستخدم تحتاج !important لتعلوه. هذا الاستثناء الوحيد للقاعدة. */
+:root[data-font="IBM Plex Sans Arabic"] { --font-body: "IBM Plex Sans Arabic", system-ui, sans-serif !important; }
+:root[data-font="Readex Pro"]           { --font-body: "Readex Pro", system-ui, sans-serif !important; }
+:root[data-font="Tajawal"]              { --font-body: "Tajawal", system-ui, sans-serif !important; }
+:root[data-font="Cairo"]                { --font-body: "Cairo", system-ui, sans-serif !important; }
+
+:root[data-accent="violet"] { --brand-primary: #5b3fd1 !important; }
+:root[data-accent="blue"]   { --brand-primary: #1f6fe0 !important; }
+:root[data-accent="green"]  { --brand-primary: #21874b !important; }
+:root[data-accent="teal"]   { --brand-primary: #11827c !important; }
+:root[data-accent="orange"] { --brand-primary: #c2611b !important; }
+:root[data-accent="plum"]   { --brand-primary: #7a2545 !important; }
+:root[data-accent="rose"]   { --brand-primary: #c02b6d !important; }
