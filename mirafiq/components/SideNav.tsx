@@ -9,6 +9,7 @@ const ITEMS = [
   { href: "/sites", label: "المواقع" },
   { href: "/brand", label: "الهوية" },
   { href: "/design", label: "المكوّنات" },
+  { href: "/settings", label: "المظهر" },
 ];
 
 export function SideNav() {
